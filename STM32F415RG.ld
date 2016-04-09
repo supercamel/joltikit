@@ -15,7 +15,7 @@
 **
 **  Environment : Atollic TrueSTUDIO(R)
 **
-**  Distribution: The file is distributed “as is,” without any warranty
+**  Distribution: The file is distributed Â“as is,Â” without any warranty
 **                of any kind.
 **
 **  (c)Copyright Atollic AB.
@@ -27,8 +27,11 @@
 *****************************************************************************
 */
 
-/* Entry Point */
-ENTRY(Reset_Handler)
+/* Enforce emmition of the vector table. */
+EXTERN (vector_table)
+
+/* Define the entry point of the output file. */
+ENTRY(reset_handler)
 
 /* Highest address of the user mode stack */
 _estack = 0x20020000;    /* end of RAM */
@@ -48,17 +51,11 @@ CCMRAM (xrw)      : ORIGIN = 0x10000000, LENGTH = 64K
 /* Define output sections */
 SECTIONS
 {
-  /* The startup code goes first into FLASH */
-  .isr_vector :
-  {
-    . = ALIGN(4);
-    KEEP(*(.isr_vector)) /* Startup code */
-    . = ALIGN(4);
-  } >FLASH
 
   /* The program code and other data goes into FLASH */
   .text :
   {
+  	*(.vectors)
     . = ALIGN(4);
     *(.text)           /* .text sections (code) */
     *(.text*)          /* .text* sections (code) */
@@ -117,13 +114,14 @@ SECTIONS
   .data : 
   {
     . = ALIGN(4);
-    _sdata = .;        /* create a global symbol at data start */
+    _data = .;        /* create a global symbol at data start */
     *(.data)           /* .data sections */
     *(.data*)          /* .data* sections */
 
     . = ALIGN(4);
     _edata = .;        /* define a global symbol at data end */
   } >RAM AT> FLASH
+  _data_loadaddr = LOADADDR(.data);
 
   _siccmram = LOADADDR(.ccmram);
 
@@ -184,3 +182,5 @@ SECTIONS
 
   .ARM.attributes 0 : { *(.ARM.attributes) }
 }
+
+PROVIDE(_stack = ORIGIN(RAM) + LENGTH(RAM));

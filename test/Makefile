@@ -4,13 +4,13 @@
 GCC_BIN = 
 PROJECT = joltikit
 
-C_SOURCES=$(shell find -L ./ -type f -iname '*.c')
-CPP_SOURCES=$(shell find -L ./ -type f -iname '*.cpp')
+
+CPP_SOURCES=$(wildcard ../EmbeddedToolKit/src/*.cpp) $(wildcard ../*.cpp) $(wildcard *.cpp)
 OBJECTS=$(foreach x, $(basename $(C_SOURCES)), $(x).o)
 OBJECTS+=$(foreach x, $(basename $(CPP_SOURCES)), $(x).o)
 
 SYS_OBJECTS = 
-INCLUDE_PATHS = -I. -I../../
+INCLUDE_PATHS = -I. -I../ -I../../ -I../EmbeddedToolKit/inc/
 LIBRARY_PATHS = 
 LIBRARIES = 
 LINKER_SCRIPT = STM32F415RG.ld
@@ -25,17 +25,17 @@ OBJDUMP = $(GCC_BIN)arm-none-eabi-objdump
 SIZE 	= $(GCC_BIN)arm-none-eabi-size
 
 CPU = -mthumb -mcpu=cortex-m4 -mfloat-abi=$(FLOAT_ABI) -mfpu=fpv4-sp-d16
-CC_FLAGS = $(CPU) -c -g -fno-common -fmessage-length=0 -Wall -ffunction-sections -fwrapv -Os
+CC_FLAGS = $(CPU) -c -g -fno-common -fmessage-length=0 -Wall -ffunction-sections -fwrapv -O3
 CC_FLAGS += -MMD -MP
-CC_SYMBOLS = -DTARGET_M4 -DTARGET_CORTEX_M -DTARGET_STM -DTARGET_STM32F4 -DTARGET_STM32F415RE -DTOOLCHAIN_GCC_ARM -DTOOLCHAIN_GCC -D__CORTEX_M4 -DARM_MATH_CM4 -D__FPU_PRESENT=1 -D__FPU_USED=1
+CC_SYMBOLS = -DSTM32F4
 CPP_FLAGS = -fno-exceptions -felide-constructors -fno-rtti -std=c++14 -Wall -ffunction-sections -fwrapv
 
 LD_FLAGS = $(CPU) -Wl,--gc-sections -u _printf_float -u _scanf_float
-LD_FLAGS += -Wl,-Map=$(PROJECT).map,--cref
-LD_SYS_LIBS = -lm
+LD_FLAGS += -Wl,-Map=$(PROJECT).map,--cref -L../libopencm3/ -L../
+LD_SYS_LIBS = -lm -lopencm3_stm32f4
 
 
-FLOAT_ABI = softfp
+FLOAT_ABI = hard
 
 
 ifeq ($(DEBUG), 1)
@@ -47,7 +47,7 @@ endif
 all: $(PROJECT).bin $(PROJECT).hex
 	@echo "The rosy roses of success burgers!"
 
-cleanall:
+clean:
 	@rm -f $(PROJECT).bin $(PROJECT).elf $(PROJECT).hex $(PROJECT).map $(PROJECT).lst $(OBJECTS) $(DEPS)
 	@echo "Project is now squeeky clean :-)"
 
@@ -86,4 +86,4 @@ DEPS = $(OBJECTS:.o=.d) $(SYS_OBJECTS:.o=.d)
 -include $(DEPS)
 
 upload:
-	stm32flash -w $(PROJECT).bin -v -g 0x0 /dev/ttyUSB0
+	stm32flash -e 1 -b 115200 -w $(PROJECT).bin -v -g 0x0 /dev/ttyUSB0
