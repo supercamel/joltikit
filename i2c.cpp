@@ -18,7 +18,7 @@ bool SoftI2C::transmit(uint8 slave, uint8* out, uint32 olen, uint8* in, uint32 i
 		start();
 		if(!write_byte(slave<<1))
 		{
-			Serial1.print("Failed to init ", (int)(slave<<1), "\r\n");
+			stop();
 			return false;
 		}
 	
@@ -26,7 +26,7 @@ bool SoftI2C::transmit(uint8 slave, uint8* out, uint32 olen, uint8* in, uint32 i
 		{
 			if(!write_byte(out[i]))
 			{
-				Serial1.print("Failed to read byte ", i, "\r\n");
+				stop();
 				return false;
 			}
 		}

@@ -5,6 +5,13 @@
 #include "gpio.h"
 
 
+/**
+ * This is a software I2C implementation. I can't figure out how to use the flaming hardware with opencm3.
+ * Personally, I don't intend to use DMA or interrupts so there's no great need for me to use hardware I2C. 
+ * Polling an I2C register takes just as long as reading/writing digital IOs. 
+ */
+ 
+ 
 class SoftI2C
 {
 public:

@@ -5,7 +5,7 @@
 #include <libopencm3/stm32/exti.h>
 
 
-static uint32 gpio_n_from_bank(GPIO_BANK bank)
+uint32 gpio_n_from_bank(GPIO_BANK bank)
 {
     switch(bank)
     {
