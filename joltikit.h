@@ -7,6 +7,8 @@
 #include "i2c.h"
 #include "gpio.h"
 #include "flash.h"
+#include "pulsein.h"
+
 
 #endif
 

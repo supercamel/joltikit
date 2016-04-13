@@ -1,5 +1,6 @@
 #include "pulsein.h"
 
+
 uint32 gpio_n_from_bank(GPIO_BANK bank);
 
 PulseIn pwm_reader;
@@ -7,6 +8,7 @@ PulseIn pwm_reader;
 
 void PulseIn::begin()
 {
+	rcc_periph_clock_enable(RCC_SYSCFG);
 	nvic_enable_irq(NVIC_EXTI0_IRQ);
 	nvic_enable_irq(NVIC_EXTI1_IRQ);
 	nvic_enable_irq(NVIC_EXTI2_IRQ);
@@ -21,6 +23,30 @@ void PulseIn::enable_channel(int chan, GPIO_BANK bank)
 	configure_as_input({bank, chan});
 	
 	channel_banks[chan] = bank;
+	
+	//http://www2.st.com/content/ccc/resource/technical/document/reference_manual/3d/6d/5a/66/b4/99/40/d4/DM00031020.pdf/files/DM00031020.pdf/jcr:content/translations/en.DM00031020.pdf
+	//refer page 294
+	
+	if(chan >= 12)
+	{
+		auto c = chan-12;
+		SYSCFG_EXTICR4 |= static_cast<int>(bank)+(c*4);
+	}
+	else if(chan >= 8)
+	{
+		auto c = chan-8;
+		SYSCFG_EXTICR3 |= static_cast<int>(bank)+(c*4);
+	}
+	else if(chan >= 4)
+	{
+		auto c = chan-4;
+		SYSCFG_EXTICR2 |= static_cast<int>(bank)+(c*4);
+	}
+	else
+	{
+		SYSCFG_EXTICR1 |= static_cast<int>(bank)+(chan*4);
+	}
+	
 	last_chan_state[chan] = read_pin({bank, chan});
 	exti_select_source((1 << chan), gpio_n_from_bank(bank));
     exti_set_trigger((1 << chan), EXTI_TRIGGER_BOTH);

@@ -11,19 +11,17 @@ int main(void)
     clock_setup();
     
     Serial1.begin(57600);
-    Serial2.begin(9600);
-    
-	etk::sleep_ms(2000);
+
+	configure_as_output({PC, 5});
 	
-	etk::StaticString<128> ss = "Hello world!";
-	flash_program_data(0, ss);
-	
-	ss = "";
-	flash_read_data(0, 128, ss);
+	pwm_reader.begin();
+	pwm_reader.enable_channel(1, PB);
 	
 	while(true)
 	{
-		Serial1.print(ss, "\r\n");
+		Serial1.print((int)pwm_reader.get_channel(1), "\r\n");
+		toggle_pin({PC, 5});
+		etk::sleep_ms(200);
 	}
 }
 
