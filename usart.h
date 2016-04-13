@@ -17,11 +17,11 @@ public:
     void begin(uint32 baud, uint32 bits=8, uint32 stopbits=USART_STOPBITS_1, uint32 parity=USART_PARITY_NONE);
     void disable();
 
-	bool is_full() volatile
-	{
-		return (end + 1) % USART_RING_BUFFER_SIZE == start;
-	}
-	
+    bool is_full() volatile
+    {
+        return (end + 1) % USART_RING_BUFFER_SIZE == start;
+    }
+
     uint32 available() volatile
     {
         return (USART_RING_BUFFER_SIZE + end - start) % USART_RING_BUFFER_SIZE;
@@ -49,8 +49,8 @@ public:
         if(available())
         {
             uint8 ret = buffer[start];
-        	start = (start + 1) % USART_RING_BUFFER_SIZE;
-        	return ret;
+            start = (start + 1) % USART_RING_BUFFER_SIZE;
+            return ret;
         }
         return 0;
     }
@@ -72,16 +72,16 @@ private:
     volatile uint8 buffer[USART_RING_BUFFER_SIZE];
     uint32 start = 0;
     volatile uint32 end = 0;
-    
+
     void push(uint8 b) volatile
     {
         if(is_full())
             return;
-            
+
         buffer[end] = b;
         end = (end + 1) % USART_RING_BUFFER_SIZE;
     }
-    
+
 
     friend void usart1_isr(void);
     friend void usart2_isr(void);

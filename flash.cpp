@@ -7,14 +7,14 @@ const int FLASH_PAGE_NUM_MAX = 812;
 
 uint32 flash_program_data(uint32 start_address, uint8 *input_data, uint16 num_elements)
 {
-	uint16 iter;
+    uint16 iter;
     uint32 current_address = start_address;
 
     start_address += 0x080E0000;
-    
+
     flash_unlock();
-	flash_wait_for_last_operation();
-	
+    flash_wait_for_last_operation();
+
     for(iter=0; iter<num_elements; iter += 4)
     {
         flash_program_word(current_address+iter, *((uint32_t*)(input_data + iter)));

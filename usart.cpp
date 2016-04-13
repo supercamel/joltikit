@@ -16,52 +16,52 @@ void UsartDriver::begin(uint32 baud, uint32 bits, uint32 stopbits, uint32 parity
     {
         rcc_periph_clock_enable(RCC_USART1);
         nvic_enable_irq(NVIC_USART1_IRQ);
-        
 
-		/* Setup GPIO pins for USART1 transmit. */
-		gpio_mode_setup(GPIOA, GPIO_MODE_AF, GPIO_PUPD_NONE, GPIO9);
-		
-		/* Setup for receive */
-		gpio_mode_setup(GPIOA, GPIO_MODE_AF, GPIO_PUPD_NONE, GPIO10);
-		gpio_set_output_options(GPIOA, GPIO_OTYPE_OD, GPIO_OSPEED_25MHZ, GPIO10);
 
-		/* Setup USART2 pins as alternate function. */
-		gpio_set_af(GPIOA, GPIO_AF7, GPIO9);
-		gpio_set_af(GPIOA, GPIO_AF7, GPIO10);
+        /* Setup GPIO pins for USART1 transmit. */
+        gpio_mode_setup(GPIOA, GPIO_MODE_AF, GPIO_PUPD_NONE, GPIO9);
+
+        /* Setup for receive */
+        gpio_mode_setup(GPIOA, GPIO_MODE_AF, GPIO_PUPD_NONE, GPIO10);
+        gpio_set_output_options(GPIOA, GPIO_OTYPE_OD, GPIO_OSPEED_25MHZ, GPIO10);
+
+        /* Setup USART2 pins as alternate function. */
+        gpio_set_af(GPIOA, GPIO_AF7, GPIO9);
+        gpio_set_af(GPIOA, GPIO_AF7, GPIO10);
     }
     break;
     case USART2:
     {
         rcc_periph_clock_enable(RCC_USART2);
         nvic_enable_irq(NVIC_USART2_IRQ);
-        
-        /* Setup GPIO pins for USART2 transmit. */
-		gpio_mode_setup(GPIOA, GPIO_MODE_AF, GPIO_PUPD_NONE, GPIO2);
-		
-		/* Setup for receive */
-		gpio_mode_setup(GPIOA, GPIO_MODE_AF, GPIO_PUPD_NONE, GPIO3);
-		gpio_set_output_options(GPIOA, GPIO_OTYPE_OD, GPIO_OSPEED_25MHZ, GPIO3);
 
-		/* Setup USART2 pins as alternate function. */
-		gpio_set_af(GPIOA, GPIO_AF7, GPIO2);
-		gpio_set_af(GPIOA, GPIO_AF7, GPIO3);
+        /* Setup GPIO pins for USART2 transmit. */
+        gpio_mode_setup(GPIOA, GPIO_MODE_AF, GPIO_PUPD_NONE, GPIO2);
+
+        /* Setup for receive */
+        gpio_mode_setup(GPIOA, GPIO_MODE_AF, GPIO_PUPD_NONE, GPIO3);
+        gpio_set_output_options(GPIOA, GPIO_OTYPE_OD, GPIO_OSPEED_25MHZ, GPIO3);
+
+        /* Setup USART2 pins as alternate function. */
+        gpio_set_af(GPIOA, GPIO_AF7, GPIO2);
+        gpio_set_af(GPIOA, GPIO_AF7, GPIO3);
     }
     break;
     case USART6:
     {
         rcc_periph_clock_enable(RCC_USART6);
         nvic_enable_irq(NVIC_USART6_IRQ);
-        
-        /* Setup GPIO pins for USART1 transmit. */
-		gpio_mode_setup(GPIOC, GPIO_MODE_AF, GPIO_PUPD_NONE, GPIO6);
-		
-		/* Setup for receive */
-		gpio_mode_setup(GPIOC, GPIO_MODE_AF, GPIO_PUPD_NONE, GPIO7);
-		gpio_set_output_options(GPIOC, GPIO_OTYPE_OD, GPIO_OSPEED_25MHZ, GPIO7);
 
-		/* Setup USART6 pins as alternate function. */
-		gpio_set_af(GPIOC, GPIO_AF8, GPIO6);
-		gpio_set_af(GPIOC, GPIO_AF8, GPIO7);
+        /* Setup GPIO pins for USART1 transmit. */
+        gpio_mode_setup(GPIOC, GPIO_MODE_AF, GPIO_PUPD_NONE, GPIO6);
+
+        /* Setup for receive */
+        gpio_mode_setup(GPIOC, GPIO_MODE_AF, GPIO_PUPD_NONE, GPIO7);
+        gpio_set_output_options(GPIOC, GPIO_OTYPE_OD, GPIO_OSPEED_25MHZ, GPIO7);
+
+        /* Setup USART6 pins as alternate function. */
+        gpio_set_af(GPIOC, GPIO_AF8, GPIO6);
+        gpio_set_af(GPIOC, GPIO_AF8, GPIO7);
     }
     break;
     }
