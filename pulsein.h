@@ -20,7 +20,9 @@ public:
 
     uint32 get_channel(int chan)
     {
-        return chan_time[chan];
+    	if(chan < 16)
+        	return chan_time[chan];
+        return 0;
     }
 
     bool available();
@@ -42,6 +44,7 @@ private:
     volatile uint32 chan_time[16];
     volatile etk::Time last_pulse_time;
     volatile bool last_chan_state[16];
+    bool channel_enabled[16];
 };
 
 extern PulseIn pwm_reader;

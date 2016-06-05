@@ -110,8 +110,13 @@ uint8 SoftI2C::read_byte()
     configure_as_input(SDA);
     configure_as_input(SCL);
 
-    while(!read_pin(SCL)) ;
-
+    auto start = etk::now();
+    while(!read_pin(SCL))
+    {
+        if(etk::now().diff_time_ms(start) > timeout)
+            return 0;
+    }
+        
     etk::Bits<uint8> bits(0);
 
     etk::sleep_us(2);

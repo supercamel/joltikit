@@ -107,7 +107,7 @@ void usart2_isr(void)
     }
 }
 
-void usart3_isr(void)
+void usart6_isr(void)
 {
     /* Check if we were called because of RXNE. */
     if (((USART_CR1(USART3) & USART_CR1_RXNEIE) != 0) &&
@@ -121,6 +121,6 @@ void usart3_isr(void)
 
 UsartDriver Serial1(USART1);
 UsartDriver Serial2(USART2);
-UsartDriver Serial3(USART3);
+UsartDriver Serial3(USART6);
 
 

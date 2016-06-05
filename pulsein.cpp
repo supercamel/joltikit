@@ -1,5 +1,6 @@
 #include "pulsein.h"
 
+#include "usart.h"
 
 uint32 gpio_n_from_bank(GPIO_BANK bank);
 
@@ -16,35 +17,43 @@ void PulseIn::begin()
     nvic_enable_irq(NVIC_EXTI4_IRQ);
     nvic_enable_irq(NVIC_EXTI9_5_IRQ);
     nvic_enable_irq(NVIC_EXTI15_10_IRQ);
+    
+    for(int i = 0; i < 16; i++)
+    	channel_enabled[i] = false;
 }
 
 void PulseIn::enable_channel(int chan, GPIO_BANK bank)
 {
-    configure_as_input({bank, chan});
+	channel_enabled[chan] = true;
+    configure_as_input({bank, chan}, INPUT_PULLDOWN);
 
     channel_banks[chan] = bank;
 
-    //http://www2.st.com/content/ccc/resource/technical/document/reference_manual/3d/6d/5a/66/b4/99/40/d4/DM00031020.pdf/files/DM00031020.pdf/jcr:content/translations/en.DM00031020.pdf
-    //refer page 294
+    /*
+    	http://www2.st.com/content/ccc/resource/technical/document/reference_manual/3d/6d/5a/66/b4/99/40/d4/DM00031020.pdf/files/DM00031020.pdf/jcr:content/translations/en.DM00031020.pdf
+    	
+    refer page 294
+    */
 
     if(chan >= 12)
     {
         auto c = chan-12;
-        SYSCFG_EXTICR4 |= static_cast<int>(bank)+(c*4);
+        SYSCFG_EXTICR4 |= (bank << (c*4));
+        
     }
     else if(chan >= 8)
     {
         auto c = chan-8;
-        SYSCFG_EXTICR3 |= static_cast<int>(bank)+(c*4);
+        SYSCFG_EXTICR3 |= (bank << (c*4));
     }
     else if(chan >= 4)
     {
         auto c = chan-4;
-        SYSCFG_EXTICR2 |= static_cast<int>(bank)+(c*4);
+        SYSCFG_EXTICR2 |= (bank << (c*4));
     }
     else
     {
-        SYSCFG_EXTICR1 |= static_cast<int>(bank)+(chan*4);
+        SYSCFG_EXTICR1 |= (bank << (chan*4));
     }
 
     last_chan_state[chan] = read_pin({bank, chan});
@@ -56,15 +65,13 @@ void PulseIn::enable_channel(int chan, GPIO_BANK bank)
 
 void PulseIn::process_isr(int chan)
 {
+	exti_reset_request((1 << chan));
     bool chan_state = read_pin({channel_banks[chan], chan});
     if(chan_state != last_chan_state[chan])
     {
         last_chan_state[chan] = chan_state;
-        exti_reset_request((1 << chan));
         if(chan_state)
-        {
             chan_start[chan] = etk::now();
-        }
         else
         {
             chan_time[chan] = etk::now().diff_time(chan_start[chan])*1000000;
@@ -73,6 +80,14 @@ void PulseIn::process_isr(int chan)
         }
     }
 }
+
+bool PulseIn::available()
+{
+	if(etk::now().diff_time(last_pulse_time) > 0.2)
+		return false;
+	return true;
+}
+
 
 void exti0_isr(void)
 {
@@ -103,9 +118,8 @@ void exti9_5_isr(void)
 {
     for(int i = 5; i <= 9; i++)
     {
-        bool chan_state = read_pin({pwm_reader.channel_banks[i], i});
-        if(chan_state != pwm_reader.last_chan_state[i])
-            pwm_reader.process_isr(i);
+        if(pwm_reader.channel_enabled[i])
+        	pwm_reader.process_isr(i);
     }
 }
 
@@ -113,9 +127,8 @@ void exti15_10_isr(void)
 {
     for(int i = 10; i <= 15; i++)
     {
-        bool chan_state = read_pin({pwm_reader.channel_banks[i], i});
-        if(chan_state != pwm_reader.last_chan_state[i])
-            pwm_reader.process_isr(i);
+        if(pwm_reader.channel_enabled[i])
+        	pwm_reader.process_isr(i);
     }
 }
 

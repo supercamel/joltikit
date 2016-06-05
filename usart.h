@@ -85,7 +85,7 @@ private:
 
     friend void usart1_isr(void);
     friend void usart2_isr(void);
-    friend void usart3_isr(void);
+    friend void usart6_isr(void);
 
 };
 

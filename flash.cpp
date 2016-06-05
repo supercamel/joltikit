@@ -8,9 +8,8 @@ const int FLASH_PAGE_NUM_MAX = 812;
 uint32 flash_program_data(uint32 start_address, uint8 *input_data, uint16 num_elements)
 {
     uint16 iter;
-    uint32 current_address = start_address;
-
     start_address += 0x080E0000;
+    uint32 current_address = start_address;
 
     flash_unlock();
     flash_wait_for_last_operation();
@@ -23,6 +22,8 @@ uint32 flash_program_data(uint32 start_address, uint8 *input_data, uint16 num_el
         if(*((uint32_t*)(current_address+iter)) != *((uint32_t*)(input_data + iter)))
             return 0x80;
     }
+    
+    flash_lock();
 
     return 0;
 }
