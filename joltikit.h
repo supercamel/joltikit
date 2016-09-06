@@ -5,6 +5,7 @@
 #include "clock.h"
 #include "usart.h"
 #include "i2c.h"
+#include "soft_i2c.h"
 #include "gpio.h"
 #include "flash.h"
 #include "pulsein.h"
