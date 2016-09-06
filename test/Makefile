@@ -12,7 +12,7 @@ INCLUDE_PATHS = -I. -I../ -I../../ -I../EmbeddedToolKit/inc/ -I../FreeRTOS/inclu
 				-I../FreeRTOS/portable/GCC/ARM_CM4F
 LIBRARY_PATHS =
 LIBRARIES =
-LINKER_SCRIPT = STM32F415RG.ld
+LINKER_SCRIPT = stm32f415.ld
 
 ###############################################################################
 AS      = $(GCC_BIN)arm-none-eabi-as

@@ -32,6 +32,7 @@
 #define LIBOPENCM3_USART_H
 
 #include <libopencm3/stm32/common/usart_common_all.h>
+#include <libopencm3/stm32/common/usart_common_v2.h>
 
 /* --- USART registers ----------------------------------------------------- */
 
@@ -252,7 +253,7 @@
 /* ADDM7:7-bit Address Detection/4-bit Address Detection */
 #define USART_CR2_ADDM7			(1 << 4)
 
-/* ADD[3:0]: Addres of the usart node
+/* ADD[3:0]: Address of the usart node
 #define USART_CR2_ADD_MASK              0xF */
 
 /* --- USART_CR3 values ---------------------------------------------------- */
@@ -342,14 +343,6 @@
 /* Note: N/A on UART4/5 */
 #define USART_GTPR_PSC_MASK             0xFF
 
-/* --- USART_RTOR values --------------------------------------------------- */
-
-/* XXX: Preguntar */
-/* BLEN[7:0]: Block Length */
-#define USART_RTOR_BLEN1_MASK             (0xFF << 24)
-
-/* RTO[23:0]: Receiver timeout value */
-#define USART_RTOR_BLEN2_MASK             (0xFFFF << 0)
 
 /* --- USART_RQR values --------------------------------------------------- */
 

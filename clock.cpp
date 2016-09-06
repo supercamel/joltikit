@@ -50,7 +50,7 @@ void clock_setup()
 
     pwr_set_vos_scale(PWR_SCALE1);
 
-    rcc_set_main_pll_hsi(16, 336, 2, 8);
+    rcc_set_main_pll_hsi(16, 336, 2, 8, 0);
 
     /* Enable PLL oscillator and wait for it to stabilize. */
     rcc_osc_on(RCC_PLL);

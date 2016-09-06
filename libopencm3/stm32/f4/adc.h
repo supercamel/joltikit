@@ -84,11 +84,15 @@ LGPL License Terms @ref lgpl_license
 
 /* --- ADC Channels ------------------------------------------------------- */
 
-/* Thanks ST! F40x and F41x are on 16, F42x and F43x are on 18! */
-#define ADC_CHANNEL_TEMP_F40	ADC_CHANNEL16
-#define ADC_CHANNEL_TEMP_F42	ADC_CHANNEL18
-#define ADC_CHANNEL_VREFINT	ADC_CHANNEL17
-#define ADC_CHANNEL_VBAT	ADC_CHANNEL18
+/** @defgroup adc_channel ADC Channel Numbers
+ * @ingroup adc_defines
+ * Thanks ST! F40x and F41x are on 16, F42x and F43x are on 18!
+ *@{*/
+#define ADC_CHANNEL_TEMP_F40	16
+#define ADC_CHANNEL_TEMP_F42	18
+#define ADC_CHANNEL_VREF	17
+#define ADC_CHANNEL_VBAT	18
+/**@}*/
 
 /* --- ADC_SR values ------------------------------------------------------- */
 
@@ -241,7 +245,7 @@ LGPL License Terms @ref lgpl_license
 
 /* Note: Bits [7:2] are reserved and must be kept at reset value. */
 
-/* CONT: Continous conversion. */
+/* CONT: Continuous conversion. */
 #define ADC_CR2_CONT			(1 << 1)
 
 /* ADON: A/D converter On/Off. */

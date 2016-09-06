@@ -180,7 +180,7 @@ specific memorymap.h header before including this header file.*/
 #define ADC_CHANNEL16           0x10
 #define ADC_CHANNEL17           0x11
 #define ADC_CHANNEL18           0x12
-
+/**@}*/
 #define ADC_CHANNEL_MASK        0x1F
 
 
@@ -287,7 +287,7 @@ specific memorymap.h header before including this header file.*/
 /* DMA: Direct memory access mode. (ADC1 and ADC3 only!) */
 #define ADC_CR2_DMA                     (1 << 8)
 
-/* CONT: Continous conversion. */
+/* CONT: Continuous conversion. */
 #define ADC_CR2_CONT                    (1 << 1)
 
 /* ADON: A/D converter On/Off. */
@@ -357,7 +357,7 @@ specific memorymap.h header before including this header file.*/
 BEGIN_DECLS
 
 void adc_power_on(uint32_t adc);
-void adc_off(uint32_t adc);
+void adc_power_off(uint32_t adc);
 void adc_enable_analog_watchdog_regular(uint32_t adc);
 void adc_disable_analog_watchdog_regular(uint32_t adc);
 void adc_enable_analog_watchdog_injected(uint32_t adc);
@@ -406,5 +406,7 @@ void adc_disable_external_trigger_injected(uint32_t adc);
 END_DECLS
 
 #endif
-#endif	/* ADC_COMMON_V1_H */
+/** @cond */
+#endif
+/** @endcond */
 /**@}*/

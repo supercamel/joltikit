@@ -89,8 +89,10 @@
 #define RCC_CR_RTCPRE_SHIFT	29
 #define RCC_CR_RTCPRE_MASK	0x3
 
-/* --- RCC_ICSCR values ---------------------------------------------------- */
-
+/** @defgroup rcc_icscr_defines RCC_ICSCR definitions
+ * @brief Internal clock sources calibration register
+ * @ingroup rcc_defines
+ *@{*/
 #define RCC_ICSCR_MSITRIM_SHIFT		24
 #define RCC_ICSCR_MSITRIM_MASK		0xff
 #define RCC_ICSCR_MSICAL_SHIFT		16
@@ -98,6 +100,9 @@
 
 #define RCC_ICSCR_MSIRANGE_SHIFT	13
 #define RCC_ICSCR_MSIRANGE_MASK		0x7
+/** @defgroup rcc_icscr_msirange MSI Ranges
+ * @ingroup rcc_icscr_defines
+ *@{*/
 #define RCC_ICSCR_MSIRANGE_65KHZ	0x0
 #define RCC_ICSCR_MSIRANGE_131KHZ	0x1
 #define RCC_ICSCR_MSIRANGE_262KHZ	0x2
@@ -105,11 +110,12 @@
 #define RCC_ICSCR_MSIRANGE_1MHZ		0x4
 #define RCC_ICSCR_MSIRANGE_2MHZ		0x5
 #define RCC_ICSCR_MSIRANGE_4MHZ		0x6
-
+/**@}*/
 #define RCC_ICSCR_HSITRIM_SHIFT		8
 #define RCC_ICSCR_HSITRIM_MASK		0x1f
 #define RCC_ICSCR_HSICAL_SHIFT		0
 #define RCC_ICSCR_HSICAL_MASK		0xff
+/**@}*/
 
 /* --- RCC_CFGR values ----------------------------------------------------- */
 
@@ -164,6 +170,8 @@
 #define RCC_CFGR_PPRE2_HCLK_DIV4		0x5
 #define RCC_CFGR_PPRE2_HCLK_DIV8		0x6
 #define RCC_CFGR_PPRE2_HCLK_DIV16		0x7
+#define RCC_CFGR_PPRE2_MASK			0x7
+#define RCC_CFGR_PPRE2_SHIFT			11
 
 /* PPRE1: APB low-speed prescaler (APB1) */
 #define RCC_CFGR_PPRE1_HCLK_NODIV		0x0
@@ -171,6 +179,8 @@
 #define RCC_CFGR_PPRE1_HCLK_DIV4		0x5
 #define RCC_CFGR_PPRE1_HCLK_DIV8		0x6
 #define RCC_CFGR_PPRE1_HCLK_DIV16		0x7
+#define RCC_CFGR_PPRE1_MASK			0x7
+#define RCC_CFGR_PPRE1_SHIFT			8
 
 /* HPRE: AHB prescaler */
 #define RCC_CFGR_HPRE_SYSCLK_NODIV		0x0
@@ -182,18 +192,24 @@
 #define RCC_CFGR_HPRE_SYSCLK_DIV128		0xd
 #define RCC_CFGR_HPRE_SYSCLK_DIV256		0xe
 #define RCC_CFGR_HPRE_SYSCLK_DIV512		0xf
+#define RCC_CFGR_HPRE_MASK			0xf
+#define RCC_CFGR_HPRE_SHIFT			4
 
 /* SWS: System clock switch status */
 #define RCC_CFGR_SWS_SYSCLKSEL_MSICLK		0x0
 #define RCC_CFGR_SWS_SYSCLKSEL_HSICLK		0x1
 #define RCC_CFGR_SWS_SYSCLKSEL_HSECLK		0x2
 #define RCC_CFGR_SWS_SYSCLKSEL_PLLCLK		0x3
+#define RCC_CFGR_SWS_MASK			0x3
+#define RCC_CFGR_SWS_SHIFT			2
 
 /* SW: System clock switch */
 #define RCC_CFGR_SW_SYSCLKSEL_MSICLK		0x0
 #define RCC_CFGR_SW_SYSCLKSEL_HSICLK		0x1
 #define RCC_CFGR_SW_SYSCLKSEL_HSECLK		0x2
 #define RCC_CFGR_SW_SYSCLKSEL_PLLCLK		0x3
+#define RCC_CFGR_SW_MASK			0x3
+#define RCC_CFGR_SW_SHIFT			0
 
 /* --- RCC_CIR values ------------------------------------------------------ */
 
@@ -397,6 +413,7 @@ struct rcc_clock_scale {
 	uint8_t ppre1;
 	uint8_t ppre2;
 	enum pwr_vos_scale voltage_scale;
+	uint32_t ahb_frequency;
 	uint32_t apb1_frequency;
 	uint32_t apb2_frequency;
 	uint8_t msi_range;
@@ -586,7 +603,6 @@ void rcc_osc_ready_int_disable(enum rcc_osc osc);
 int rcc_osc_ready_int_flag(enum rcc_osc osc);
 void rcc_css_int_clear(void);
 int rcc_css_int_flag(void);
-void rcc_wait_for_osc_ready(enum rcc_osc osc);
 void rcc_wait_for_sysclk_status(enum rcc_osc osc);
 void rcc_osc_on(enum rcc_osc osc);
 void rcc_osc_off(enum rcc_osc osc);
@@ -594,6 +610,7 @@ void rcc_css_enable(void);
 void rcc_css_disable(void);
 void rcc_osc_bypass_enable(enum rcc_osc osc);
 void rcc_osc_bypass_disable(enum rcc_osc osc);
+void rcc_set_msi_range(uint32_t range);
 void rcc_set_sysclk_source(uint32_t clk);
 void rcc_set_pll_configuration(uint32_t source, uint32_t multiplier,
 			       uint32_t divisor);

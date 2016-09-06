@@ -1,19 +1,22 @@
-/** @defgroup timer_defines Timers Defines
- *
- * @brief <b>Defined Constants and Types for the STM32F0xx Timers</b>
- *
- * @ingroup STM32F0xx_defines
- *
- * @version 1.0.0
- *
- * @date 11 July 2013
- *
- * LGPL License Terms @ref lgpl_license
- */
+/** @defgroup timer_defines Timer Defines
+
+@brief <b>libopencm3 Defined Constants and Types for the STM32L4xx Timers</b>
+
+@ingroup STM32L4xx_defines
+
+@version 1.0.0
+
+@date 30 November 2015
+
+@author @htmlonly &copy; @endhtmlonly 2015 Karl Palsson <karlp@tweak.net.au>
+
+LGPL License Terms @ref lgpl_license
+*/
+
 /*
  * This file is part of the libopencm3 project.
  *
- * Copyright (C) 2013 Frantisek Burian <BuFran@seznam.cz>
+ * Copyright (C) 2015 Karl Palsson <karlp@tweak.net.au>
  *
  * This library is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -32,6 +35,10 @@
 #ifndef LIBOPENCM3_TIMER_H
 #define LIBOPENCM3_TIMER_H
 
-#include <libopencm3/stm32/common/timer_common_f24.h>
+#include <libopencm3/stm32/common/timer_common_all.h>
+
+BEGIN_DECLS
+
+END_DECLS
 
 #endif

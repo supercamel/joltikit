@@ -159,6 +159,7 @@
 
 /* SWS: System clock switch status */
 #define RCC_CFGR_SWS_SHIFT			2
+#define RCC_CFGR_SWS_MASK			0x3
 #define RCC_CFGR_SWS_HSI			0x0
 #define RCC_CFGR_SWS_HSE			0x1
 #define RCC_CFGR_SWS_PLL			0x2
@@ -425,6 +426,7 @@ struct rcc_clock_scale {
 	uint8_t ppre1;
 	uint8_t ppre2;
 	uint8_t power_save;
+	uint32_t ahb_frequency;
 	uint32_t apb1_frequency;
 	uint32_t apb2_frequency;
 };
@@ -586,7 +588,6 @@ void rcc_osc_ready_int_disable(enum rcc_osc osc);
 int rcc_osc_ready_int_flag(enum rcc_osc osc);
 void rcc_css_int_clear(void);
 int rcc_css_int_flag(void);
-void rcc_wait_for_osc_ready(enum rcc_osc osc);
 void rcc_wait_for_osc_not_ready(enum rcc_osc osc);
 void rcc_wait_for_sysclk_status(enum rcc_osc osc);
 void rcc_osc_on(enum rcc_osc osc);
