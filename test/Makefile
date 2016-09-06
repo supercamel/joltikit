@@ -1,18 +1,20 @@
-GCC_BIN = 
+GCC_BIN =
 PROJECT = joltikit
 
 
 CPP_SOURCES=$(wildcard ../EmbeddedToolKit/src/*.cpp) $(wildcard ../*.cpp) $(wildcard *.cpp)
+C_SOURCES=$(wildcard ../FreeRTOS/*.c) $(wildcard ../FreeRTOS/portable/GCC/ARM_CM4F/*.c)
 OBJECTS=$(foreach x, $(basename $(C_SOURCES)), $(x).o)
 OBJECTS+=$(foreach x, $(basename $(CPP_SOURCES)), $(x).o)
 
-SYS_OBJECTS = 
-INCLUDE_PATHS = -I. -I../ -I../../ -I../EmbeddedToolKit/inc/
-LIBRARY_PATHS = 
-LIBRARIES = 
+SYS_OBJECTS =
+INCLUDE_PATHS = -I. -I../ -I../../ -I../EmbeddedToolKit/inc/ -I../FreeRTOS/include \
+				-I../FreeRTOS/portable/GCC/ARM_CM4F
+LIBRARY_PATHS =
+LIBRARIES =
 LINKER_SCRIPT = STM32F415RG.ld
 
-############################################################################### 
+###############################################################################
 AS      = $(GCC_BIN)arm-none-eabi-as
 CC      = $(GCC_BIN)arm-none-eabi-gcc
 CPP     = $(GCC_BIN)arm-none-eabi-g++
@@ -29,7 +31,7 @@ CPP_FLAGS = -fno-exceptions -felide-constructors -fno-rtti -std=c++14 -Wall -ffu
 
 LD_FLAGS = $(CPU) -Wl,--gc-sections -u _printf_float -u _scanf_float
 LD_FLAGS += -Wl,-Map=$(PROJECT).map,--cref -L../libopencm3/ -L../
-LD_SYS_LIBS = -lm -lopencm3_stm32f4
+LD_SYS_LIBS = -lm -lopencm3_stm32f4 -lnosys -lgcc -lc
 
 
 FLOAT_ABI = hard

@@ -4,16 +4,17 @@
 #include <etk/etk.h>
 
 
-uint32 flash_program_data(uint32 start_address, uint8 *input_data, uint16 num_elements);
+void flash_read_data(int start, unsigned int len, unsigned char* b);
+uint32 flash_program_data(int start, unsigned char* b, unsigned int len);
+
+
+
 
 template <uint32 N> uint32 flash_program_data(uint32 start_address, etk::StaticString<N>& ss)
 {
     return flash_program_data(start_address + 0x080E0000, (uint8*)ss.c_str(), ss.length()+1);
 }
 
-
-
-void flash_read_data(uint32 start_address, uint16 num_elements, uint8 *output_data);
 
 template <uint32 N> void flash_read_data(uint32 start_address, uint16 num_elements, etk::StaticString<N>& ss)
 {

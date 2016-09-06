@@ -1,21 +1,14 @@
-#ifndef SOFT_I2C_H
-#define SOFT_I2C_H
+#ifndef JOLTIKIT_I2C_INCLUDED
+#define JOLTIKIT_I2C_INCLUDED
 
 
 #include "gpio.h"
 
 
-/**
- * This is a software I2C implementation. I can't figure out how to use the flaming hardware with opencm3.
- * Personally, I don't intend to use DMA or interrupts so there's no great need for me to use hardware I2C.
- * Polling an I2C register takes just as long as reading/writing digital IOs.
- */
-
-
-class SoftI2C
+class I2C
 {
 public:
-    SoftI2C(gpio_pin sda, gpio_pin scl) : SDA(sda), SCL(scl)
+    I2C(gpio_pin sda, gpio_pin scl) : SDA(sda), SCL(scl)
     { }
 
     void set_timeout(uint32 t)
@@ -38,7 +31,6 @@ public:
 
     void send_ack();
     void send_nack();
-    
 
 private:
 
@@ -50,8 +42,7 @@ private:
 };
 
 
-extern SoftI2C i2c1;
+extern I2C i2c1;
+
 
 #endif
-
-

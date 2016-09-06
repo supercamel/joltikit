@@ -1,4 +1,7 @@
 #include "clock.h"
+#include "FreeRTOS.h"
+#include "task.h"
+#include "portable.h"
 #include <libopencm3/cm3/systick.h>
 #include <libopencm3/stm32/rcc.h>
 #include <libopencm3/stm32/gpio.h>
@@ -7,12 +10,31 @@
 #include <libopencm3/stm32/flash.h>
 #include <etk/etk.h>
 
+extern "C" {
 
+void vPortSVCHandler( void );
+void xPortPendSVHandler( void );
+void xPortSysTickHandler( void );
 
+}
+
+void sv_call_handler(void)
+{
+      vPortSVCHandler();
+}
+ void pend_sv_handler(void)
+{
+      xPortPendSVHandler();
+}
 void sys_tick_handler(void)
 {
-    etk::tick();
-}
+     etk::tick();
+    if (xTaskGetSchedulerState() != taskSCHEDULER_NOT_STARTED)
+    {
+        xPortSysTickHandler();
+    }
+} 
+
 
 void clock_setup()
 {
