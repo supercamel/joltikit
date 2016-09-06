@@ -11,6 +11,22 @@
 
 void clock_setup()
 {
+	RCC_CR |= (uint32_t)0x00000001;
+
+	/* Reset CFGR register */
+	RCC_CFGR = 0x00000000;
+
+	/* Reset HSEON, CSSON and PLLON bits */
+	RCC_CR &= (uint32_t)0xFEF6FFFF;
+
+	/* Reset PLLCFGR register */
+	RCC_PLLCFGR = 0x24003010;
+
+	/* Reset HSEBYP bit */
+	RCC_CR &= (uint32_t)0xFFFBFFFF;
+
+	/* Disable all interrupts */
+	RCC_CIR = 0x00000000;
     /*
     	.pllm = 16,
     	.plln = 336,
