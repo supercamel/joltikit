@@ -4,6 +4,11 @@
 #include <etk/etk.h>
 
 
+void etk_tick()
+{
+	etk::tick();
+}
+
 extern "C" {
 
 void vPortSVCHandler( void );
@@ -34,25 +39,28 @@ void vApplicationGetTimerTaskMemory( StaticTask_t **ppxTimerTaskTCBBuffer,
     *pulTimerTaskStackSize = configTIMER_TASK_STACK_DEPTH;
 }
 
-
-}
-
 void sv_call_handler(void)
 {
       vPortSVCHandler();
 }
- void pend_sv_handler(void)
+
+
+void pend_sv_handler(void)
 {
       xPortPendSVHandler();
 }
+
+
 void sys_tick_handler(void)
 {
-     etk::tick();
+    etk_tick();
     if (xTaskGetSchedulerState() != taskSCHEDULER_NOT_STARTED)
     {
         xPortSysTickHandler();
     }
 } 
+
+}
 
 
 
