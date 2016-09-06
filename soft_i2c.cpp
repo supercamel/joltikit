@@ -1,5 +1,6 @@
 #include "soft_i2c.h"
-
+#include "FreeRTOS.h"
+#include "task.h"
 
 void SoftI2C::begin()
 {
@@ -12,12 +13,14 @@ void SoftI2C::begin()
 
 bool SoftI2C::transmit(uint8 slave, uint8* out, uint32 olen, uint8* in, uint32 ilen)
 {
+	vTaskSuspendAll();
     if(olen)
     {
         start();
         if(!write_byte(slave<<1))
         {
             stop();
+            xTaskResumeAll();
             return false;
         }
 
@@ -26,6 +29,7 @@ bool SoftI2C::transmit(uint8 slave, uint8* out, uint32 olen, uint8* in, uint32 i
             if(!write_byte(out[i]))
             {
                 stop();
+                xTaskResumeAll();
                 return false;
             }
         }
@@ -47,7 +51,7 @@ bool SoftI2C::transmit(uint8 slave, uint8* out, uint32 olen, uint8* in, uint32 i
     }
 
     stop();
-
+	xTaskResumeAll();
     return true;
 }
 
@@ -57,13 +61,13 @@ void SoftI2C::start()
     configure_as_output(SCL);
 
     set_pin(SDA, HIGH);
-    etk::sleep_us(2);
+    small_delay();
     set_pin(SCL, HIGH);
-    etk::sleep_us(2);
+    small_delay();
     set_pin(SDA, LOW);
-    etk::sleep_us(2);
+    small_delay();
     set_pin(SCL, LOW);
-    etk::sleep_us(2);
+    small_delay();
 }
 
 void SoftI2C::stop()
@@ -71,12 +75,12 @@ void SoftI2C::stop()
     configure_as_output(SDA);
 
     set_pin(SDA, LOW);
-    etk::sleep_us(2);
+    small_delay();
 
     set_pin(SCL, HIGH);
-    etk::sleep_us(2);
+    small_delay();
     set_pin(SDA, HIGH);
-    etk::sleep_us(2);
+    small_delay();
 }
 
 bool SoftI2C::write_byte(uint8 b)
@@ -93,14 +97,14 @@ bool SoftI2C::write_byte(uint8 b)
     }
 
     configure_as_input(SDA);
-    etk::sleep_us(2);
+    small_delay();
     set_pin(SCL, HIGH);
-    etk::sleep_us(2);
+    small_delay();
 
     bool ack = !read_pin(SDA);
-    etk::sleep_us(2);
+    small_delay();
     set_pin(SCL, LOW);
-
+	
     return ack;
 }
 
@@ -118,21 +122,22 @@ uint8 SoftI2C::read_byte()
 
     etk::Bits<uint8> bits(0);
 
-    etk::sleep_us(2);
+    small_delay();
     bits.set_bit(7, read_pin(SDA));
-    etk::sleep_us(2);
+    small_delay();
     configure_as_output(SCL);
     set_pin(SCL, LOW);
-    etk::sleep_us(4);
+    small_delay();
 
     for(uint8 i = 1; i < 8; i++)
     {
         set_pin(SCL, HIGH);
-        etk::sleep_us(2);
+        small_delay();
         bits.set_bit(7-i, read_pin(SDA));
-        etk::sleep_us(2);
+        small_delay();
         set_pin(SCL, LOW);
-        etk::sleep_us(4);
+        small_delay();
+        small_delay();
     }
 
     return bits.get();
@@ -155,10 +160,18 @@ void SoftI2C::send_nack()
 
 void SoftI2C::clock_pulse()
 {
-    etk::sleep_us(2);
+    small_delay();
     set_pin(SCL, HIGH);
-    etk::sleep_us(4);
+    small_delay();
+    small_delay();
     set_pin(SCL, LOW);
-    etk::sleep_us(2);
+    small_delay();
 }
+
+void SoftI2C::small_delay()
+{
+	for(int i = 0; i < 10; i++)
+		asm("nop");
+}
+
 

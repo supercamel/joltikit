@@ -41,7 +41,7 @@ public:
     
 
 private:
-
+	void small_delay();
 
     gpio_pin SDA;
     gpio_pin SCL;
