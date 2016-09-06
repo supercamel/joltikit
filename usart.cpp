@@ -110,10 +110,10 @@ void usart2_isr(void)
 void usart6_isr(void)
 {
     /* Check if we were called because of RXNE. */
-    if (((USART_CR1(USART3) & USART_CR1_RXNEIE) != 0) &&
-            ((USART_SR(USART3) & USART_SR_RXNE) != 0))
+    if (((USART_CR1(USART6) & USART_CR1_RXNEIE) != 0) &&
+            ((USART_SR(USART6) & USART_SR_RXNE) != 0))
     {
-        char c = usart_recv(USART3);
+        char c = usart_recv(USART6);
         Serial3.push(c);
     }
 }
