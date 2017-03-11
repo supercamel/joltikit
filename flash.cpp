@@ -4,14 +4,16 @@
 const int FLASH_PAGE_SIZE = 0x800;
 const int FLASH_PAGE_NUM_MAX = 812;
 
-uint32 flash_program_data(int start_address, unsigned char* input_data, unsigned int num_elements)
+uint32_t flash_program_data(uint32_t start_address, unsigned char* input_data, uint32_t num_elements)
 {
-    uint16 iter;
-    start_address += 0x080E0000;
-    uint32 current_address = start_address;
+    uint32_t iter;
+    start_address += FLASH_OFFSET;
+    uint32_t current_address = start_address;
 
     flash_unlock();
     flash_wait_for_last_operation();
+    flash_clear_status_flags();
+    flash_erase_sector(11, 2);
 
     for(iter=0; iter<num_elements; iter += 4)
     {
@@ -28,14 +30,14 @@ uint32 flash_program_data(int start_address, unsigned char* input_data, unsigned
 }
 
 
-void flash_read_data(int start_address, unsigned int num_elements, unsigned char *output_data)
+void flash_read_data(uint32_t start_address, uint32_t num_elements, unsigned char *output_data)
 {
-    uint16 iter;
-    uint32 *memory_ptr= (uint32*)(start_address+0x080E0000);
+    uint32_t iter;
+    uint32_t *memory_ptr= (uint32_t*)(start_address+FLASH_OFFSET);
 
     for(iter=0; iter<num_elements/4; iter++)
     {
-        *(uint32*)output_data = *(memory_ptr + iter);
+        *(uint32_t*)output_data = *(memory_ptr + iter);
         output_data += 4;
     }
 }

@@ -2,8 +2,10 @@
 #include "FreeRTOS.h"
 #include "task.h"
 
-void SoftI2C::begin()
+void SoftI2C::begin(gpio_pin sda, gpio_pin scl)
 {
+	SDA = sda;
+	SCL = scl;
     configure_as_output(SDA);
     configure_as_output(SCL);
 

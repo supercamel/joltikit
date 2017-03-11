@@ -50,14 +50,14 @@ void UsartDriver::begin(uint32 baud, uint32 bits, uint32 stopbits, uint32 parity
     case USART6:
     {
         rcc_periph_clock_enable(RCC_USART6);
-        nvic_enable_irq(NVIC_USART6_IRQ);
+        //nvic_enable_irq(NVIC_USART6_IRQ);
 
         /* Setup GPIO pins for USART1 transmit. */
         gpio_mode_setup(GPIOC, GPIO_MODE_AF, GPIO_PUPD_NONE, GPIO6);
 
         /* Setup for receive */
         gpio_mode_setup(GPIOC, GPIO_MODE_AF, GPIO_PUPD_NONE, GPIO7);
-        gpio_set_output_options(GPIOC, GPIO_OTYPE_OD, GPIO_OSPEED_25MHZ, GPIO7);
+        gpio_set_output_options(GPIOC, GPIO_OTYPE_OD, GPIO_OSPEED_100MHZ, GPIO7);
 
         /* Setup USART6 pins as alternate function. */
         gpio_set_af(GPIOC, GPIO_AF8, GPIO6);

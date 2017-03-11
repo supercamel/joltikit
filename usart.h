@@ -6,7 +6,7 @@
 #include <libopencm3/cm3/nvic.h>
 
 
-const uint16 USART_RING_BUFFER_SIZE = 64;
+const uint16 USART_RING_BUFFER_SIZE = 128;
 
 
 class UsartDriver : public etk::Stream<UsartDriver>
@@ -86,6 +86,8 @@ private:
     friend void usart1_isr(void);
     friend void usart2_isr(void);
     friend void usart6_isr(void);
+    
+    friend void dma2_stream1_isr(void);
 
 };
 

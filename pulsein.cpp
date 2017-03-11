@@ -19,7 +19,10 @@ void PulseIn::begin()
     nvic_enable_irq(NVIC_EXTI15_10_IRQ);
     
     for(int i = 0; i < 16; i++)
+    {
     	channel_enabled[i] = false;
+    	chan_time[i] = 1500;
+    }
 }
 
 void PulseIn::enable_channel(int chan, GPIO_BANK bank)
@@ -63,9 +66,8 @@ void PulseIn::enable_channel(int chan, GPIO_BANK bank)
 }
 
 
-void PulseIn::process_isr(int chan)
+void PulseIn::process_isr(int chan) volatile
 {
-	exti_reset_request((1 << chan));
     bool chan_state = read_pin({channel_banks[chan], chan});
     if(chan_state != last_chan_state[chan])
     {
@@ -79,6 +81,8 @@ void PulseIn::process_isr(int chan)
                 last_pulse_time = etk::now();
         }
     }
+    
+    exti_reset_request((1 << chan));
 }
 
 bool PulseIn::available()

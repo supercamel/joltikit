@@ -79,7 +79,8 @@ size:
 	$(SIZE) $(PROJECT).elf
 
 monitor:
-	screen /dev/ttyUSB0 57600
+	./terminal
+	#screen /dev/ttyUSB0 57600
 
 DEPS = $(OBJECTS:.o=.d) $(SYS_OBJECTS:.o=.d)
 -include $(DEPS)

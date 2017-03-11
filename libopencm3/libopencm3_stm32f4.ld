@@ -32,6 +32,7 @@ SECTIONS
 {
 	.text : {
 		*(.vectors)	/* Vector table */
+		. = ALIGN(4);
 		*(.text*)	/* Program code */
 		. = ALIGN(4);
 		*(.rodata*)	/* Read-only data */
@@ -92,10 +93,18 @@ SECTIONS
 		_ebss = .;
 	} >ram
 
+	/DISCARD/ :
+   {
+     libc.a ( * )
+     libm.a ( * )
+     libgcc.a ( * )
+   }
 
 	. = ALIGN(4);
 	end = .;
+	
+	.ARM.attributes 0 : { *(.ARM.attributes) }
 }
 
-PROVIDE(_stack = ORIGIN(ram) + LENGTH(ram));
+PROVIDE(_stack = ORIGIN(ccmram) + LENGTH(ccmram));
 

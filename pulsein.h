@@ -18,7 +18,7 @@ public:
 
     void enable_channel(int chan, GPIO_BANK bank);
 
-    uint32 get_channel(int chan)
+    uint32 get_channel(int chan) volatile
     {
     	if(chan < 16)
         	return chan_time[chan];
@@ -28,7 +28,7 @@ public:
     bool available();
 
 private:
-    void process_isr(int channel);
+    void process_isr(int channel) volatile;
 
     friend void exti0_isr(void);
     friend void exti1_isr(void);

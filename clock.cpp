@@ -12,24 +12,15 @@
 
 void clock_setup()
 {
+	/*
 	RCC_CR |= (uint32_t)0x00000001;
-
-	/* Reset CFGR register */
 	RCC_CFGR = 0x00000000;
-
-	/* Reset HSEON, CSSON and PLLON bits */
 	RCC_CR &= (uint32_t)0xFEF6FFFF;
-
-	/* Reset PLLCFGR register */
 	RCC_PLLCFGR = 0x24003010;
-
-	/* Reset HSEBYP bit */
 	RCC_CR &= (uint32_t)0xFFFBFFFF;
-
-	/* Disable all interrupts */
 	RCC_CIR = 0x00000000;
-	
 	SCB_VTOR = 0x08000000;
+	*/
     /*
     	.pllm = 16,
     	.plln = 336,
@@ -81,7 +72,7 @@ void clock_setup()
     rcc_osc_off(RCC_HSI);
 
     // clock rate is 1680 to get 10uS interrupt rate
-    systick_set_reload(1680);
+    systick_set_reload(168);
     systick_set_clocksource(STK_CSR_CLKSOURCE_AHB);
     systick_counter_enable();
 
@@ -91,7 +82,7 @@ void clock_setup()
     rcc_periph_clock_enable(RCC_GPIOB);
     rcc_periph_clock_enable(RCC_GPIOC);
 
-    etk::set_tick_rate(10);
+    etk::set_tick_rate(1);
 }
 
 

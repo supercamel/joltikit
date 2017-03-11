@@ -41,22 +41,34 @@ void vApplicationGetTimerTaskMemory( StaticTask_t **ppxTimerTaskTCBBuffer,
 
 void sv_call_handler(void)
 {
-      vPortSVCHandler();
+	if (xTaskGetSchedulerState() != taskSCHEDULER_NOT_STARTED)
+    	vPortSVCHandler();
 }
 
 
 void pend_sv_handler(void)
 {
-      xPortPendSVHandler();
+	if (xTaskGetSchedulerState() != taskSCHEDULER_NOT_STARTED)
+		xPortPendSVHandler();
+}
+
+void vPortSetupTimerInterrupt( void )
+{
+
 }
 
 
 void sys_tick_handler(void)
 {
+	static int tick_count = 0;
     etk_tick();
-    if (xTaskGetSchedulerState() != taskSCHEDULER_NOT_STARTED)
+    if((tick_count++) == 100)
     {
-        xPortSysTickHandler();
+    	tick_count = 0;
+		if (xTaskGetSchedulerState() != taskSCHEDULER_NOT_STARTED)
+		{
+		    xPortSysTickHandler();
+		}
     }
 } 
 

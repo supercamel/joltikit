@@ -15,7 +15,7 @@
 class SoftI2C
 {
 public:
-    SoftI2C(gpio_pin sda, gpio_pin scl) : SDA(sda), SCL(scl)
+    SoftI2C()
     { }
 
     void set_timeout(uint32 t)
@@ -23,7 +23,7 @@ public:
         timeout = t;
     }
 
-    void begin();
+    void begin(gpio_pin sda, gpio_pin scl);
     void end() { }
 
     bool transmit(uint8 slave, uint8* out, uint32 olen, uint8* in, uint32 ilen);
